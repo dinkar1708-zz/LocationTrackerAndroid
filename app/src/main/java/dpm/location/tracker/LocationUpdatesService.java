@@ -56,9 +56,9 @@ public class LocationUpdatesService extends JobService implements LocationUpdate
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i(TAG, "onStartCommand Service started");
-
-        mActivityMessenger = intent.getParcelableExtra(MESSENGER_INTENT_KEY);
-
+        if (intent != null) {
+            mActivityMessenger = intent.getParcelableExtra(MESSENGER_INTENT_KEY);
+        }
         //hey request for location updates
         locationUpdatesComponent.onStart();
 

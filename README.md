@@ -1,4 +1,6 @@
 
+### Note need to handle the background limit - https://developer.android.com/about/versions/oreo/background-location-limits.html
+
 ## WHAT [Get continuous location in android using background Service]
 App module - API - LocationUpdatesService.java - min API - Android 5.0	21	LOLLIPOP - since job service arises in this api
 GpsTracker module - min API 15

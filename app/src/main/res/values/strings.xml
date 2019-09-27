@@ -7,4 +7,6 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_job_service_demo">Job Service Fused Location Provider Client
     </string>
+    <string name="background_service_for_location_is_running">Background service for location is running</string>
+    <string name="location_will_be_updated_here">Location will be updated here</string>
 </resources>

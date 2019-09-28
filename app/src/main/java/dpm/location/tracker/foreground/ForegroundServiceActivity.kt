@@ -1,4 +1,4 @@
-package dpm.location.tracker
+package dpm.location.tracker.foreground
 
 import android.Manifest
 import android.content.Intent
@@ -14,11 +14,14 @@ import android.view.MenuItem
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import dpm.location.tracker.R
+import dpm.location.tracker.background.BackgroundLocationActivity
+import kotlinx.android.synthetic.main.activity_foreground_service.*
 import java.text.DateFormat
 import java.util.*
 
 
-class JobServiceDemoActivity : AppCompatActivity() {
+class ForegroundServiceActivity : AppCompatActivity() {
 
     private lateinit var locationMsg: TextView
 
@@ -28,13 +31,18 @@ class JobServiceDemoActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_job_service_demo)
+        setContentView(R.layout.activity_foreground_service)
 
         locationMsg = findViewById(R.id.location)
 
         mHandler = IncomingMessageHandler()
 
         requestPermissions()
+
+        background_demo.setOnClickListener {
+            startActivity(Intent(this, BackgroundLocationActivity::class.java))
+            finish()
+        }
     }
 
     /**
@@ -51,10 +59,10 @@ class JobServiceDemoActivity : AppCompatActivity() {
                 finish()
             } else if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // can be schedule in this way also
-                //  Utils.scheduleJob(this, LocationUpdatesService.class);
+                //  Utils.scheduleJob(this, ForegroundService.class);
                 //doing this way to communicate via messenger
                 // Start service and provide it a way to communicate with this class.
-                val startServiceIntent = Intent(this, LocationUpdatesService::class.java)
+                val startServiceIntent = Intent(this, ForegroundService::class.java)
                 val messengerIncoming = Messenger(mHandler)
                 startServiceIntent.putExtra(MESSENGER_INTENT_KEY, messengerIncoming)
                 startService(startServiceIntent)
@@ -70,26 +78,6 @@ class JobServiceDemoActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.job_service_demo, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        val id = item.itemId
-
-
-        return if (id == R.id.action_settings) {
-            true
-        } else super.onOptionsItemSelected(item)
-
-    }
-
     private fun requestPermissions() {
         val shouldProvideRationale = ActivityCompat.shouldShowRequestPermissionRationale(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
@@ -99,7 +87,7 @@ class JobServiceDemoActivity : AppCompatActivity() {
         if (shouldProvideRationale) {
             Log.i(TAG, "Displaying permission rationale to provide additional context.")
             // Request permission
-            ActivityCompat.requestPermissions(this@JobServiceDemoActivity,
+            ActivityCompat.requestPermissions(this@ForegroundServiceActivity,
                     arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                     REQUEST_PERMISSIONS_REQUEST_CODE)
         } else {
@@ -107,7 +95,7 @@ class JobServiceDemoActivity : AppCompatActivity() {
             // Request permission. It's possible this can be auto answered if device policy
             // sets the permission in a given state or the user denied the permission
             // previously and checked "Never ask again".
-            ActivityCompat.requestPermissions(this@JobServiceDemoActivity,
+            ActivityCompat.requestPermissions(this@ForegroundServiceActivity,
                     arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                     REQUEST_PERMISSIONS_REQUEST_CODE)
         }
@@ -121,7 +109,7 @@ class JobServiceDemoActivity : AppCompatActivity() {
             super.handleMessage(msg)
 
             when (msg.what) {
-                LocationUpdatesService.LOCATION_MESSAGE -> {
+                ForegroundService.LOCATION_MESSAGE -> {
                     val obj = msg.obj as Location
                     val currentDateTimeString = DateFormat.getDateTimeInstance().format(Date())
                     locationMsg.text = "LAT :  " + obj.latitude + "\nLNG : " + obj.longitude + "\n\n" + obj.toString() + " \n\n\nLast updated- " + currentDateTimeString
@@ -131,7 +119,7 @@ class JobServiceDemoActivity : AppCompatActivity() {
     }
 
     companion object {
-        private val TAG = JobServiceDemoActivity::class.java.simpleName
+        private val TAG = ForegroundServiceActivity::class.java.simpleName
 
         /**
          * Code used in requesting runtime permissions.

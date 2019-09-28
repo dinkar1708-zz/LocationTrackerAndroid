@@ -1,39 +1,29 @@
-package dpm.location.tracker
+package dpm.location.tracker.foreground
 
 import android.app.Service
-import android.app.job.JobParameters
-import android.app.job.JobService
 import android.content.Intent
 import android.location.Location
+import android.os.IBinder
 import android.os.Message
 import android.os.Messenger
 import android.os.RemoteException
 import android.util.Log
 import android.widget.Toast
-import dpm.location.tracker.JobServiceDemoActivity.Companion.MESSENGER_INTENT_KEY
+import dpm.location.tracker.LocationUpdatesComponent
+import dpm.location.tracker.foreground.ForegroundServiceActivity.Companion.MESSENGER_INTENT_KEY
 
 
 /**
  * location update service continues to running and getting location information
  */
-class LocationUpdatesService : JobService(), LocationUpdatesComponent.ILocationProvider {
+class ForegroundService : Service(), LocationUpdatesComponent.ILocationProvider {
+    override fun onBind(p0: Intent?): IBinder? {
+        return null
+    }
 
     private var mActivityMessenger: Messenger? = null
 
     private lateinit var locationUpdatesComponent: LocationUpdatesComponent
-
-    override fun onStartJob(params: JobParameters): Boolean {
-        Log.i(TAG, "onStartJob....")
-        return true
-    }
-
-    override fun onStopJob(params: JobParameters): Boolean {
-        Log.i(TAG, "onStopJob....")
-
-        locationUpdatesComponent.onStop()
-
-        return false
-    }
 
     override fun onCreate() {
         Log.i(TAG, "created...............")
@@ -51,11 +41,11 @@ class LocationUpdatesService : JobService(), LocationUpdatesComponent.ILocationP
         //hey request for location updates
         locationUpdatesComponent.onStart()
 
-        return Service.START_STICKY
+        return START_STICKY
     }
 
     override fun onRebind(intent: Intent) {
-        // Called when a client (MainActivity in case of this sample) returns to the foreground
+        // Called when a client (BackgroundLocationActivity in case of this sample) returns to the foreground
         // and binds once again with this service. The service should cease to be a foreground
         // service when that happens.
         Log.i(TAG, "in onRebind()")
@@ -70,6 +60,7 @@ class LocationUpdatesService : JobService(), LocationUpdatesComponent.ILocationP
 
     override fun onDestroy() {
         Log.i(TAG, "onDestroy....")
+        locationUpdatesComponent.onStop()
     }
 
     /**
@@ -79,7 +70,7 @@ class LocationUpdatesService : JobService(), LocationUpdatesComponent.ILocationP
      */
     private fun sendMessage(messageID: Int, location: Location?) {
         // If this service is launched by the JobScheduler, there's no callback Messenger. It
-        // only exists when the MainActivity calls startService() with the callback in the Intent.
+        // only exists when the BackgroundLocationActivity calls startService() with the callback in the Intent.
         Log.d(TAG, "Location - $location")
         Toast.makeText(applicationContext, "Location - $location", Toast.LENGTH_LONG).show()
         if (mActivityMessenger == null) {
@@ -103,7 +94,7 @@ class LocationUpdatesService : JobService(), LocationUpdatesComponent.ILocationP
 
     companion object {
 
-        private val TAG = LocationUpdatesService::class.java.simpleName
+        private val TAG = ForegroundService::class.java.simpleName
         const val LOCATION_MESSAGE = 9999
     }
 }

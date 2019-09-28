@@ -76,7 +76,7 @@ class BackgroundService : IntentService("BackgroundService"), LocationUpdatesCom
         m.obj = location
         try {
             mActivityMessenger!!.send(m)
-            Toast.makeText(applicationContext, "$location", Toast.LENGTH_LONG).show()
+            Toast.makeText(applicationContext, "$location", Toast.LENGTH_SHORT).show()
         } catch (e: RemoteException) {
             Log.e(TAG, "Error passing service object back to activity.")
         }

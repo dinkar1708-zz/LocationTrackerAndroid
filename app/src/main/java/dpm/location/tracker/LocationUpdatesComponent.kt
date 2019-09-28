@@ -153,7 +153,7 @@ class LocationUpdatesComponent(private var iLocationProvider: ILocationProvider)
         /**
          * The desired interval for location updates. Inexact. Updates may be more or less frequent.
          */
-        private const val UPDATE_INTERVAL_IN_MILLISECONDS = (3 * 1000).toLong()
+        private const val UPDATE_INTERVAL_IN_MILLISECONDS = (6 * 1000).toLong()
 
         /**
          * The fastest rate for active location updates. Updates will never be more frequent

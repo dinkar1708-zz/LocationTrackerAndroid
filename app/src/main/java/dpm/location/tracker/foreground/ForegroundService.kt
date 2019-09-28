@@ -72,7 +72,7 @@ class ForegroundService : Service(), LocationUpdatesComponent.ILocationProvider 
         // If this service is launched by the JobScheduler, there's no callback Messenger. It
         // only exists when the BackgroundLocationActivity calls startService() with the callback in the Intent.
         Log.d(TAG, "Location - $location")
-        Toast.makeText(applicationContext, "Location - $location", Toast.LENGTH_LONG).show()
+//        Toast.makeText(applicationContext, "Location - $location", Toast.LENGTH_LONG).show()
         if (mActivityMessenger == null) {
             Log.d(TAG, "Service is bound, not started. There's no callback to send a message to.")
             return

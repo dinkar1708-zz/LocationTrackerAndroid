@@ -36,6 +36,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
+        android:padding="8dp"
+        android:background="@drawable/rounded_button_drawable"
         android:text="@string/start_background_demo_activity"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

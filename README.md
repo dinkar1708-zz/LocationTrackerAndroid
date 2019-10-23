@@ -1,17 +1,22 @@
 
+### Note need to handle the background limit - https://developer.android.com/about/versions/oreo/background-location-limits.html
+
+### background package-
+- runs always ie. in background thread, even when activity destroyed
+
+### foreground package-
+- runs foreground service - till activity is running
+
+### LocationUpdatesComponent.kt - get the location
 ## WHAT [Get continuous location in android using background Service]
-App module - API - LocationUpdatesService.java - min API - Android 5.0	21	LOLLIPOP - since job service arises in this api
-GpsTracker module - min API 15
 FusedLocationProviderClient.java - google client
+
 #### DESCRIPTION
 #### Permissions-
 ACCESS_COARSE_LOCATION
 ACCESS_FINE_LOCATION
-#### Why JobScheduler
-JobScheduler is guaranteed to get your job done, but since it operates at the system level.
-https://medium.com/google-developers/scheduling-jobs-like-a-pro-with-jobscheduler-286ef8510129
-JobScheduler is becoming the go-to answer for performing background work in Android. Android Nougat introduced several background optimizations,
-for which JobScheduler is the best practice solution. So, if you haven’t already, it’s time to jump on the JobScheduler train.
+FOREGROUND_SERVICE
+
 #### Why FusedLocationProviderClient
 Google’s Fused Location Services API
 Most recommended API by everyone. The android official document recommends to use this way
@@ -39,9 +44,13 @@ Even when using the correct FusedLocationApi, there are a lot of things that can
     users current location can be shown on google map
 
 
-
 ##### References
 https://developer.android.com/training/location/receive-location-updates.html
 https://github.com/googlesamples/android-play-location
 https://github.com/codepath/android_guides/wiki/Retrieving-Location-with-LocationServices-API
+
+#### TODO
+- for android 10 handling is remaining...
+If your app targets Android 10 or higher, you must declare the ACCESS_BACKGROUND_LOCATION permission in your app's manifest file and receive user permission in order to receive regular location updates while your app is in the background.
+https://developer.android.com/training/location/receive-location-updates.html
 

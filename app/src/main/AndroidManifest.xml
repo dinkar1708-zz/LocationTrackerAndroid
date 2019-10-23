@@ -4,8 +4,12 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!--for location information-->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <!--foreground service-->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:allowBackup="true"
@@ -15,10 +19,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".JobServiceDemoActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:name=".foreground.ForegroundServiceActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,10 +28,14 @@
             </intent-filter>
         </activity>
 
-        <service
-            android:name=".LocationUpdatesService"
-            android:label="My Job Service Update "
-            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <activity
+            android:name=".background.BackgroundLocationActivity"
+            android:label="Background Service Demo" />
+
+        <service android:name=".foreground.ForegroundService" />
+
+        <service android:name=".background.BackgroundService" />
+
     </application>
 
 </manifest>
